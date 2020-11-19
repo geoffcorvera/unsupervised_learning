@@ -11,6 +11,7 @@ class KMeans(object):
         # randomly initialize k centroids
         self.centroids = np.random.rand(k, X.shape[1])*np.max(X)
         self.k = k
+        self.nft = X.shape[1]
 
     def assign(self, X):
         self.clusters = [list() for _ in range(self.k)]
@@ -18,10 +19,15 @@ class KMeans(object):
             deltas = [x - m for m in self.centroids]
             norms = [np.linalg.norm(d) for d in deltas]
             nearest = np.argmin([np.linalg.norm(n) for n in norms])
-            self.clusters[nearest].append(tuple(x))
-
-    def train(self):
-        self.centroids = [random.random() for _ in range(self.k)]
+            self.clusters[nearest].append(x)
+    
+    def update(self):
+        for cluster, k in zip(self.clusters, range(self.k)):
+            cluster = np.array(cluster)
+            if cluster.size > 0:
+                # calculate centroid
+                centroid = [np.mean(cluster[:,i:i+1]) for i in range(self.nft)]
+                self.centroids[k] = centroid
 
     def classify(self,x):
         x = np.array(x)
@@ -37,7 +43,9 @@ class KMeans(object):
 
 def test(k,data):
     kmc = KMeans(k, data)
-    kmc.train()
-    print(kmc.clusters)
+    kmc.assign(data)
+    print(kmc.centroids)
+    kmc.update()
+    print(kmc.centroids)
 
-test(k=3, data=np.random.randint(1,5,(3,2)))
+test(k=3, data=np.random.randint(1,5,(10,2)))
