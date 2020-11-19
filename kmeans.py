@@ -23,7 +23,6 @@ class KMeans(object):
     def train(self):
         self.centroids = [random.random() for _ in range(self.k)]
 
-    # argmin(range(k):for s in ksets)
     def classify(self,x):
         x = np.array(x)
         wcss = [np.linalg.norm(x-u) for u in self.centroids]
@@ -38,7 +37,7 @@ class KMeans(object):
 
 def test(k,data):
     kmc = KMeans(k, data)
-    kmc.assign(data)
+    kmc.train()
     print(kmc.clusters)
 
 test(k=3, data=np.random.randint(1,5,(3,2)))
