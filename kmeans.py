@@ -8,17 +8,17 @@ except (IndexError):
 
 class KMeans(object):
     def __init__(self,k,X):
+        # randomly initialize k centroids
+        self.centroids = np.random.rand(k, X.shape[1])*np.max(X)
         self.k = k
-        # TODO: randomly initialize centroids (shift by X.mean, scale by X.std)
-        self.centroids = list()
 
     def assign(self, X):
-        self.clusters = [set() for _ in range(self.k)]
+        self.clusters = [list() for _ in range(self.k)]
         for x in X:
-            l2distance = [x - m for m in self.centroids]
-            nearest = np.argmin([np.linalg.norm(d) for d in l2distance])
-            self.clusters[nearest].add(x)
-            self.centroids[nearest] = np.mean(self.clusters[nearest])
+            deltas = [x - m for m in self.centroids]
+            norms = [np.linalg.norm(d) for d in deltas]
+            nearest = np.argmin([np.linalg.norm(n) for n in norms])
+            self.clusters[nearest].append(tuple(x))
 
     def train(self):
         self.centroids = [random.random() for _ in range(self.k)]
@@ -29,16 +29,16 @@ class KMeans(object):
         wcss = [np.linalg.norm(x-u) for u in self.centroids]
         return np.argmin(np.array(wcss))
 
-nft = 4
-X = np.ones((5,3))
-km = KMeans(K, X)
-km.train()
-datum = [random.random() for _ in range(nft)]
-print(km.classify(datum))
-
 # E step (assign Z clusters)
     # find most plausible assignments for Z (sub-optimzation prob)
 # MLE estimates (maximize likelihood of the paramters)
     # (MLE)est.params
     # k means parameters: cluster centroids (mus)
 # repeat E & MLE]
+
+def test(k,data):
+    kmc = KMeans(k, data)
+    kmc.assign(data)
+    print(kmc.clusters)
+
+test(k=3, data=np.random.randint(1,5,(3,2)))
