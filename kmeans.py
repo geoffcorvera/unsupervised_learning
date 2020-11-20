@@ -13,6 +13,7 @@ class KMeans(object):
         self.k = k
         self.nft = X.shape[1]
 
+    # E step (assign most plausible cluster to xs)
     def assign(self, X):
         self.clusters = [list() for _ in range(self.k)]
         for x in X:
@@ -21,7 +22,8 @@ class KMeans(object):
             nearest = np.argmin([np.linalg.norm(n) for n in norms])
             self.clusters[nearest].append(x)
     
-    def update(self):
+    # Estimate maximize likelihood of the paramters (recalculate k centroids)
+    def updateParams(self):
         for cluster, k in zip(self.clusters, range(self.k)):
             cluster = np.array(cluster)
             if cluster.size > 0:
@@ -31,29 +33,27 @@ class KMeans(object):
     
     def train(self, X, niter=11):
         prev = None
-        curr = self.centroids[:]
-        for _ in range(niter):
+        curr = np.copy(self.centroids)
+        i = 0
+        while not np.array_equal(prev, curr) and i < niter:
+            print(f"iteration: {i}")
             self.assign(X)
-            self.update()
-            print(self.centroids)
-
+            self.updateParams()
+            prev = curr
+            curr = self.centroids
+            i += 1
+            
+    # XXX: use apply_along_axis(argmin(centroids),1,X)
     def classify(self,x):
         x = np.array(x)
         wcss = [np.linalg.norm(x-u) for u in self.centroids]
         return np.argmin(np.array(wcss))
 
-# E step (assign Z clusters)
-    # find most plausible assignments for Z (sub-optimzation prob)
-# MLE estimates (maximize likelihood of the paramters)
-    # (MLE)est.params
-    # k means parameters: cluster centroids (mus)
-# repeat E & MLE]
 
 def test(k,data):
     kmc = KMeans(k, data)
-    kmc.assign(data)
-    print(kmc.centroids)
-    kmc.update()
-    print(kmc.centroids)
+    print(f"Initialize:\n{' '.join(str(m) for m in kmc.centroids)}")
+    kmc.train(data, niter=5)
+    print(f"Final centroids:\n{' '.join(str(m) for m in kmc.centroids)}")
 
 test(k=3, data=np.random.randint(1,5,(30,2)))
