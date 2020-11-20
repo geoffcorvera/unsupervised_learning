@@ -26,7 +26,7 @@ class KMeans(object):
             cluster = np.array(cluster)
             if cluster.size > 0:
                 # calculate centroid
-                centroid = [np.mean(cluster[:,i:i+1]) for i in range(self.nft)]
+                centroid = np.mean(cluster,axis=0)
                 self.centroids[k] = centroid
 
     def classify(self,x):
