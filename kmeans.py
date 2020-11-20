@@ -28,6 +28,14 @@ class KMeans(object):
                 # Calc mean of each feature
                 centroid = np.mean(cluster,axis=0)
                 self.centroids[k] = centroid
+    
+    def train(self, X, niter=11):
+        prev = None
+        curr = self.centroids[:]
+        for _ in range(niter):
+            self.assign(X)
+            self.update()
+            print(self.centroids)
 
     def classify(self,x):
         x = np.array(x)
@@ -48,4 +56,4 @@ def test(k,data):
     kmc.update()
     print(kmc.centroids)
 
-test(k=3, data=np.random.randint(1,5,(10,2)))
+test(k=3, data=np.random.randint(1,5,(30,2)))
