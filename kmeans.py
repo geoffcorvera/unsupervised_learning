@@ -25,7 +25,7 @@ class KMeans(object):
         for cluster, k in zip(self.clusters, range(self.k)):
             cluster = np.array(cluster)
             if cluster.size > 0:
-                # calculate centroid
+                # Calc mean of each feature
                 centroid = np.mean(cluster,axis=0)
                 self.centroids[k] = centroid
 
