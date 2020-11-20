@@ -48,12 +48,3 @@ class KMeans(object):
         x = np.array(x)
         wcss = [np.linalg.norm(x-u) for u in self.centroids]
         return np.argmin(np.array(wcss))
-
-
-def test(k,data):
-    kmc = KMeans(k, data)
-    print(f"Initialize:\n{' '.join(str(m) for m in kmc.centroids)}")
-    kmc.train(data, niter=5)
-    print(f"Final centroids:\n{' '.join(str(m) for m in kmc.centroids)}")
-
-test(k=3, data=np.random.randint(1,5,(30,2)))
