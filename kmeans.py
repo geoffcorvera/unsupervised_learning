@@ -30,7 +30,8 @@ class KMeans(object):
         prev = None
         curr = np.copy(self.centroids)
         i = 0
-        while not np.array_equal(prev, curr) and i < niter:
+        # while not np.array_equal(prev, curr) and i < niter:
+        while i < niter:
             print(f"iteration: {i}")
             self.assign(X)
             self.updateParams()
