@@ -1,10 +1,17 @@
 import numpy as np
-from kmeans import KMeans  
+import matplotlib.pyplot as plt
+from kmeans import KMeans 
 
 data = np.genfromtxt('data/545_cluster_dataset.txt')
-labels = data[:,:1].astype(int)
-training = data[:,1:]
+K = 3
+km = KMeans(K,data)
+km.train(data)
+results = km.classify(data)
 
-km = KMeans(3,training)
-km.train(training)
-predictions = km.classify(training)
+# Split clusters
+clusters = [data[np.where(results==k)] for k in range(K)]
+
+# Plot
+for cluster, color in zip(clusters, ['r','g','b']):
+    plt.scatter(cluster[:,:1], cluster[:,1:], c=color)
+plt.show()
