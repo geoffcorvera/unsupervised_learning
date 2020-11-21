@@ -14,7 +14,7 @@ class KMeans(object):
         for x in X:
             deltas = [x - m for m in self.centroids]
             norms = [np.linalg.norm(d) for d in deltas]
-            nearest = np.argmin([np.linalg.norm(n) for n in norms])
+            nearest = np.argmin(norms)
             self.clusters[nearest].append(x)
     
     # Estimate maximize likelihood of the paramters (recalculate k centroids)
