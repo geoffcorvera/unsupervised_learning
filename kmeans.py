@@ -26,17 +26,17 @@ class KMeans(object):
                 centroid = np.mean(cluster,axis=0)
                 self.centroids[k] = centroid
     
-    def train(self, X, niter=11):
+    def train(self, X, niter=100):
         prev = None
         curr = np.copy(self.centroids)
         i = 0
         # while not np.array_equal(prev, curr) and i < niter:
-        while i < niter:
+        while not np.array_equal(prev, curr) and i < niter:
             print(f"iteration: {i}")
             self.assign(X)
             self.updateParams()
-            prev = curr
-            curr = self.centroids
+            prev = np.copy(curr)
+            curr = np.copy(self.centroids)
             i += 1
             
     # XXX: use apply_along_axis(argmin(centroids),1,X)
