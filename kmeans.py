@@ -1,11 +1,6 @@
 import sys, random
 import numpy as np
 
-try:
-    K = int(sys.argv[1])
-except (IndexError):
-    K = 2
-
 class KMeans(object):
     def __init__(self,k,X):
         # randomly initialize k centroids
