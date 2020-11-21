@@ -40,7 +40,9 @@ class KMeans(object):
             i += 1
             
     # XXX: use apply_along_axis(argmin(centroids),1,X)
-    def classify(self,x):
-        x = np.array(x)
-        wcss = [np.linalg.norm(x-u) for u in self.centroids]
-        return np.argmin(np.array(wcss))
+        # Calculate distances from k 
+        d1 = np.linalg.norm(X-self.centroids[0], axis=1)
+        d2 = np.linalg.norm(X-self.centroids[1], axis=1)
+        d3 = np.linalg.norm(X-self.centroids[2], axis=1)
+        res = np.c_[d1,d2,d3]
+        return np.apply_along_axis(np.argmin, 1, res)
