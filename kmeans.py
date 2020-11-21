@@ -40,9 +40,10 @@ class KMeans(object):
             i += 1
             
     # XXX: use apply_along_axis(argmin(centroids),1,X)
-        # Calculate distances from k 
+    def classify(self,X):
+        # Calculate distances from k cluster centroids 
         d1 = np.linalg.norm(X-self.centroids[0], axis=1)
         d2 = np.linalg.norm(X-self.centroids[1], axis=1)
         d3 = np.linalg.norm(X-self.centroids[2], axis=1)
-        res = np.c_[d1,d2,d3]
-        return np.apply_along_axis(np.argmin, 1, res)
+        centroid_distances = np.c_[d1,d2,d3]
+        return np.apply_along_axis(np.argmin, 1, centroid_distances)
