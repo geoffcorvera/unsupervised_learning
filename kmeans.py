@@ -2,6 +2,7 @@ import sys, random
 import numpy as np
 
 class KMeans(object):
+
     def __init__(self,k,X):
         # randomly initialize k centroids
         self.centroids = np.random.rand(k, X.shape[1])*np.max(X)
@@ -41,9 +42,10 @@ class KMeans(object):
             
     # XXX: use apply_along_axis(argmin(centroids),1,X)
     def classify(self,X):
-        # Calculate distances from k cluster centroids 
+        # Calculate distances from k cluster centroids
         d1 = np.linalg.norm(X-self.centroids[0], axis=1)
         d2 = np.linalg.norm(X-self.centroids[1], axis=1)
         d3 = np.linalg.norm(X-self.centroids[2], axis=1)
+        # d4 = np.linalg.norm(X-self.centroids[3], axis=1)
         centroid_distances = np.c_[d1,d2,d3]
         return np.apply_along_axis(np.argmin, 1, centroid_distances)
