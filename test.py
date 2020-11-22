@@ -12,6 +12,7 @@ results = km.classify(data)
 clusters = [data[np.where(results==k)] for k in range(K)]
 
 # Plot
-for cluster, color in zip(clusters, ['r','g','b']):
+colors = np.array(['r','g','b','#7f7f7f'])
+for cluster, color in zip(clusters, colors[:K]):
     plt.scatter(cluster[:,:1], cluster[:,1:], c=color)
 plt.show()
