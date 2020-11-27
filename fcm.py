@@ -36,7 +36,19 @@ class FCM(object):
     # Compute centroid for each cluster (M-step)
     # For each data point, recompute membership scores for being in the clusters (E-step)
 
-test_data = np.random.rand(4,2)
+# Setup test data
+cluster1 = np.random.normal(2, 0.3, size=(25,2))
+cluster2 = np.random.normal(3, 0.3, size=(25,2))
+cluster3 = np.random.normal((-1,3), 0.2, size=(25,2))
+test_data = np.concatenate([cluster1, cluster2, cluster3], axis=0)
+
 fcm = FCM(3, 1.2, test_data)
 fcm.c_update(test_data)
-print(fcm.centroids)
+
+import matplotlib.pyplot as plt
+
+# Show test data
+colors = ['#477998', '#A3333D', '#C4D6B0']
+plt.scatter(test_data[:,:1], test_data[:,1:], c=colors[0])
+plt.membership_update(test_data)
+# plt.show()
