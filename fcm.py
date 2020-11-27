@@ -31,6 +31,14 @@ class FCM(object):
             self.centroids[c] = collector
             collector = np.zeros((1,nfeatures))
     
+    
+    def classify(self, data):
+        # Calculate distances from k cluster centroids
+        d1 = np.linalg.norm(X-self.centroids[0], axis=1)
+        d2 = np.linalg.norm(X-self.centroids[1], axis=1)
+        d3 = np.linalg.norm(X-self.centroids[2], axis=1)
+        centroid_distances = np.c_[d1,d2,d3]
+        return np.apply_along_axis(np.argmin, 1, centroid_distances)
 
 # Repeat until convergence or stopping condition
     # Compute centroid for each cluster (M-step)
