@@ -29,7 +29,7 @@ class FCM(object):
     # TODO: refactor janky loops into matrix ops with numpy
     # multiply 1D array elems to corresponding row in 2D array:
     # scaled_X = self.memberships[:,c:c+1] * fuzzy_scores[:,np.newaxis]
-    def nextCentroid(self,X):
+    def update_centroids(self,X):
         nfeatures = X.shape[1]
         mem_raised = np.power(self.memberships, self.m)
         collector = np.zeros((1,nfeatures))
@@ -44,7 +44,7 @@ class FCM(object):
             collector = np.zeros((1,nfeatures))
 
 
-    def nextMemberships(self,X):
+    def update_membership(self,X):
         coef = float(2/(self.m-1))
         for i,xi in enumerate(X):
             distances = np.array([np.linalg.norm(xi-ck) for ck in self.centroids])
@@ -60,8 +60,8 @@ class FCM(object):
         i = 0
         while not np.allclose(prev, curr) and i < maxiter:
             print(f'iteration: {i}')
-            self.nextCentroid(X)
-            self.nextMemberships(X)
+            self.update_centroids(X)
+            self.update_membership(X)
             prev = np.copy(curr)
             curr = np.copy(self.centroids)
             i += 1
