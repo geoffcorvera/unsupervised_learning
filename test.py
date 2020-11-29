@@ -6,16 +6,8 @@ from fcm import FCM
 colors = np.array(['#49111c','#ee2e31','#1d7874','#7f7f7f'])
 data = np.genfromtxt('data/545_cluster_dataset.txt')
 
-def SSE(clusters, centroids):
-    """
-    For each point, the error is the distance to the nearest cluster
-    SSE:
-        for each cluster
-            sum:
-            for each datum in cluster
-                sum: norm(k-centroid, xi)**2
-    """
-    pass
+
+    
 
 def runTrials(ntrials):
     pass
@@ -50,17 +42,21 @@ def km_test(K):
 
 def fcm_test(K):
     fcm = FCM(K,1.2,data)
-    fcm.fit(data, 40)
+    err_plot = fcm.train(data, 40)
     results = fcm.classify()
 
     # Split test data by results
     splits = [data[np.where(results==k)] for k in range(K)]
     
+    # Plot sum-of-squares error per epoch
+    plt.plot(err_plot)
+    plt.show()
+
     # Plot results
     for cluster,color in zip(splits,colors[:K]):
         plt.scatter(cluster[:,:1],cluster[:,1:], c=color)
     plt.show()
 
 # Run test
-# fcm_test(K=3)
-plotGroundTruth(data)
+fcm_test(K=3)
+# plotGroundTruth(data)
