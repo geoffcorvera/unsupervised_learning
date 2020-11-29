@@ -6,7 +6,7 @@ from fcm import FCM
 colors = np.array(['#49111c','#ee2e31','#1d7874','#7f7f7f'])
 data = np.genfromtxt('data/545_cluster_dataset.txt')
 
-def plotGroundTruth(X):
+def plotTargetAssignments(X):
     c1 = X[:500]
     c2 = X[500:1000]
     c3 = X[1000:]
@@ -34,18 +34,15 @@ def generateTestData():
     cluster3 = np.random.normal((-1,3), 0.2, size=(5,2))
     return np.concatenate([cluster1, cluster2, cluster3], axis=0)
 
+
 def km_test(K):
     km = KMeans(K,data)
-    km.train(data)
+    err_plot = km.train(data)
     results = km.classify(data)
-
-    # Split test data by cluster assignments
-    clusters = [data[np.where(results==k)] for k in range(K)]
-
-    # Plot results
-    for cluster, color in zip(clusters, colors[:K]):
-        plt.scatter(cluster[:,:1], cluster[:,1:], c=color)
+    plt.plot(err_plot)
     plt.show()
+    plotKClusters(results,K,data)
+
 
 def fcm_test(K):
     fcm = FCM(K,1.2,data)
@@ -59,6 +56,7 @@ def fcm_test(K):
     # Plot final cluster assignments
     plotKClusters(results,K,data)
 
-# Run test
-fcm_test(K=3)
+
+# fcm_test(K=3)
+km_test(K=3)
 # plotGroundTruth(data)
