@@ -3,6 +3,7 @@ from kmeans import KMeans
 
 class FCM(object):
 
+
     def __init__(self,c,m,X):
         assert m > 1
         # initialize memberships, & scale so rows sum to 1
@@ -16,6 +17,7 @@ class FCM(object):
         self.m = m
         self.memberships = memberships
         self.centroids = centroids
+
     
     # Initialize centroids with a KMeans run
     def initCentroids(self,c,X):
@@ -23,6 +25,7 @@ class FCM(object):
         km.train(X)
         return np.copy(km.centroids)
     
+
     # TODO: refactor janky loops into matrix ops with numpy
     # multiply 1D array elems to corresponding row in 2D array:
     # scaled_X = self.memberships[:,c:c+1] * fuzzy_scores[:,np.newaxis]
@@ -39,6 +42,7 @@ class FCM(object):
             collector = collector / np.sum(cluster_weights)
             self.centroids[c] = collector
             collector = np.zeros((1,nfeatures))
+
 
     def nextMemberships(self,X):
         coef = float(2/(self.m-1))
@@ -62,6 +66,7 @@ class FCM(object):
             curr = np.copy(self.centroids)
             i += 1
 
-    def classify(self, X):
-        pass
+    # For each datum, returns cluster num with highest membership score
+    def classify(self):
+        return np.apply_along_axis(np.argmax, 1, self.memberships)
         
