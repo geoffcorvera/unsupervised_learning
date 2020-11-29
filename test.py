@@ -27,7 +27,7 @@ def fcm_test():
     test_data = np.concatenate([cluster1, cluster2, cluster3], axis=0)
 
     fcm = FCM(3,2,test_data)
+    fcm.nextCentroid(test_data)
     fcm.nextMemberships(test_data)
-    assert(np.sum(fcm.memberships, axis=1)[0] == float(1))
 
 fcm_test()
