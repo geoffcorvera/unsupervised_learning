@@ -6,7 +6,19 @@ from fcm import FCM
 colors = np.array(['#49111c','#ee2e31','#1d7874','#7f7f7f'])
 data = np.genfromtxt('data/545_cluster_dataset.txt')
 
-# TODO: calculate sum square error
+def SSE(clusters, centroids):
+    """
+    For each point, the error is the distance to the nearest cluster
+    SSE:
+        for each cluster
+            sum:
+            for each datum in cluster
+                sum: norm(k-centroid, xi)**2
+    """
+    pass
+
+def runTrials(ntrials):
+    pass
 
 def plotGroundTruth(X):
     c1 = X[:500]
