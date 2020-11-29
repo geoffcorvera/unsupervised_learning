@@ -16,8 +16,22 @@ class FCM(object):
         self.memberships = memberships
         self.centroids = centroids
     
-    def nextCentroid(self):
-        pass
+    # TODO: refactor janky loops into matrix ops with numpy
+    # multiply 1D array elems to corresponding row in 2D array:
+    # scaled_X = self.memberships[:,c:c+1] * fuzzy_scores[:,np.newaxis]
+    def nextCentroid(self,X):
+        nfeatures = X.shape[1]
+        mem_raised = np.power(self.memberships, self.m)
+        collector = np.zeros((1,nfeatures))
+
+        for c in range(self.c):
+            cluster_weights = mem_raised[:,c:c+1]
+            for w,x in zip(cluster_weights, X):
+                collector += w * x
+            
+            collector = collector / np.sum(cluster_weights)
+            self.centroids[c] = collector
+            collector = np.zeros((1,nfeatures))
 
     def nextMemberships(self,X):
         # XXX breaks if self.m == 1
