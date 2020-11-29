@@ -3,6 +3,7 @@ import numpy as np
 class FCM(object):
 
     def __init__(self,c,m,X):
+        assert m > 1
         # initialize memberships, & scale so rows sum to 1
         memberships = np.random.rand(X.shape[0], c)
         sums = np.sum(memberships, axis=1)
@@ -34,7 +35,6 @@ class FCM(object):
             collector = np.zeros((1,nfeatures))
 
     def nextMemberships(self,X):
-        # XXX breaks if self.m == 1
         coef = float(2/(self.m-1))
         for i,xi in enumerate(X):
             distances = np.array([np.linalg.norm(xi-ck) for ck in self.centroids])
@@ -59,3 +59,4 @@ class FCM(object):
 
     def classify(self, X):
         pass
+        
