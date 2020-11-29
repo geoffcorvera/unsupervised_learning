@@ -54,17 +54,36 @@ class FCM(object):
                 self.memberships[i][j] = 1/(t*sumterm)
 
 
-    def fit(self,X,maxiter=10):
+    # Calculates the sum squared err for each cluster and returns total SSE
+    def SSE(self,X):
+        results = self.classify()
+        assert len(results) == len(X)
+        
+        err = 0
+        for c in range(self.c):
+            cluster = X[np.where(results==c)]
+            err += np.sum(np.linalg.norm(cluster-self.centroids[c], axis=1)**2)
+
+        return err
+            
+    
+    def train(self,X,maxiter=10):
         curr = np.copy(self.centroids)
         prev = np.zeros(curr.shape)
         i = 0
+        err_per_epoch = list()
+        
         while not np.allclose(prev, curr) and i < maxiter:
             print(f'iteration: {i}')
             self.nextCentroid(X)
             self.nextMemberships(X)
+
             prev = np.copy(curr)
             curr = np.copy(self.centroids)
+            err_per_epoch.append(self.SSE(X))
             i += 1
+        
+        return err_per_epoch
 
     # For each datum, returns cluster num with highest membership score
     def classify(self):
