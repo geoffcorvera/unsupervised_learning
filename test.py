@@ -26,8 +26,8 @@ def fcm_test():
     cluster3 = np.random.normal((-1,3), 0.2, size=(5,2))
     test_data = np.concatenate([cluster1, cluster2, cluster3], axis=0)
 
-    print(f"Max: {np.max(test_data)}\tMean: {np.mean(test_data)}")
-
-    fcm = FCM(3,1,test_data)
+    fcm = FCM(3,2,test_data)
+    fcm.nextMemberships(test_data)
+    assert(np.sum(fcm.memberships, axis=1)[0] == float(1))
 
 fcm_test()
