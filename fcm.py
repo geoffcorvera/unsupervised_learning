@@ -19,8 +19,16 @@ class FCM(object):
     def nextCentroid(self):
         pass
 
-    def nextMemberships(self):
-        pass
+    def nextMemberships(self,X):
+        # XXX breaks if self.m == 1
+        coef = float(2/(self.m-1))
+        for i,xi in enumerate(X):
+            distances = np.array([np.linalg.norm(xi-ck) for ck in self.centroids])
+            for j,cj in enumerate(self.centroids):
+                t = np.linalg.norm(xi-cj)**coef
+                sumterm = np.sum((1/(distances))**coef)
+                self.memberships[i][j] = 1/(t*sumterm)
+
 
     def fit(self, X):
         pass
