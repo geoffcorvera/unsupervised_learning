@@ -9,6 +9,15 @@ class KMeans(object):
         self.k = k
         self.nft = X.shape[1]
 
+    # Returns total sum-of-squares error over all clusters
+    def SSE(self,X):
+        results = self.classify(X)
+        assert len(results) == len(X)
+        err = 0
+        for k in range(self.k):
+            cluster = X[np.where(results==k)]
+            err += np.sum(np.linalg.norm(cluster-self.centroids[k], axis=1)**2)
+
     # E step (assign most plausible cluster to xs)
     def assign(self, X):
         self.clusters = [list() for _ in range(self.k)]
@@ -31,6 +40,8 @@ class KMeans(object):
         prev = None
         curr = np.copy(self.centroids)
         i = 0
+        err_per_epoch = list()
+
         # while not np.array_equal(prev, curr) and i < niter:
         while not np.array_equal(prev, curr) and i < niter:
             print(f"iteration: {i}")
@@ -38,7 +49,10 @@ class KMeans(object):
             self.updateParams()
             prev = np.copy(curr)
             curr = np.copy(self.centroids)
+            err_per_epoch.append(self.SSE(X))
             i += 1
+            
+        return err_per_epoch
             
     def classify(self,X):
         # Calculate distances from k cluster centroids
