@@ -1,4 +1,5 @@
 import numpy as np
+from kmeans import KMeans
 
 class FCM(object):
 
@@ -9,13 +10,18 @@ class FCM(object):
         sums = np.sum(memberships, axis=1)
         memberships = memberships/sums[:,np.newaxis]
         
-        # XXX: Should initial centroids be scaled and shifted?
-        centroids = np.random.rand(c, X.shape[1])
+        centroids = self.initCentroids(c,X)
 
         self.c = c
         self.m = m
         self.memberships = memberships
         self.centroids = centroids
+    
+    # Initialize centroids with a KMeans run
+    def initCentroids(self,c,X):
+        km = KMeans(c,X)
+        km.train(X)
+        return np.copy(km.centroids)
     
     # TODO: refactor janky loops into matrix ops with numpy
     # multiply 1D array elems to corresponding row in 2D array:
