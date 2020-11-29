@@ -6,6 +6,17 @@ from fcm import FCM
 colors = np.array(['#49111c','#ee2e31','#1d7874','#7f7f7f'])
 data = np.genfromtxt('data/545_cluster_dataset.txt')
 
+# TODO: calculate sum square error
+
+def plotGroundTruth(X):
+    c1 = X[:500]
+    c2 = X[500:1000]
+    c3 = X[1000:]
+    clusters = [c1,c2,c3]
+    for i,cluster in enumerate(clusters):
+        plt.scatter(cluster[:,:1], cluster[:,1:], c=colors[i])
+    plt.show()
+
 def generateTestData():
     cluster1 = np.random.normal(2, 0.3, size=(5,2))
     cluster2 = np.random.normal(3, 0.3, size=(5,2))
@@ -39,4 +50,5 @@ def fcm_test(K):
     plt.show()
 
 # Run test
-fcm_test(K=3)
+# fcm_test(K=3)
+plotGroundTruth(data)
