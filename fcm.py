@@ -25,10 +25,8 @@ class FCM(object):
         km.train(X)
         return np.copy(km.centroids)
     
-
-    # TODO: refactor janky loops into matrix ops with numpy
-    # multiply 1D array elems to corresponding row in 2D array:
-    # scaled_X = self.memberships[:,c:c+1] * fuzzy_scores[:,np.newaxis]
+    
+    # Recalculate centroids
     def nextCentroid(self,X):
         nfeatures = X.shape[1]
         mem_raised = np.power(self.memberships, self.m)
@@ -44,6 +42,7 @@ class FCM(object):
             collector = np.zeros((1,nfeatures))
 
 
+    # Recalculate membership scores for each datum
     def nextMemberships(self,X):
         coef = float(2/(self.m-1))
         for i,xi in enumerate(X):
@@ -84,6 +83,7 @@ class FCM(object):
             i += 1
         
         return err_per_epoch
+
 
     # For each datum, returns cluster num with highest membership score
     def classify(self):

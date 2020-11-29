@@ -6,10 +6,8 @@ from fcm import FCM
 colors = np.array(['#49111c','#ee2e31','#1d7874','#7f7f7f'])
 data = np.genfromtxt('data/545_cluster_dataset.txt')
 
-
-    
-
-def runTrials(ntrials):
+# TODO: run 10 trials and select model with lowest SSE
+def runTrials(ntrials=10):
     pass
 
 def plotGroundTruth(X):
