@@ -3,7 +3,7 @@ from kmeans import KMeans
 
 class FCM(object):
 
-
+    # Initialize model parameters
     def __init__(self,c,m,X):
         assert m > 1
         # initialize memberships, & scale so rows sum to 1
@@ -11,19 +11,15 @@ class FCM(object):
         sums = np.sum(memberships, axis=1)
         memberships = memberships/sums[:,np.newaxis]
         
-        centroids = self.initCentroids(c,X)
+        # Initialize centroids using k-means
+        km = KMeans(c,X)
+        km.train(X)
+        centroids = np.copy(km.centroids)
 
         self.c = c
         self.m = m
         self.memberships = memberships
         self.centroids = centroids
-
-    
-    # Initialize centroids with a KMeans run
-    def initCentroids(self,c,X):
-        km = KMeans(c,X)
-        km.train(X)
-        return np.copy(km.centroids)
     
     
     # Recalculate centroids
