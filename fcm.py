@@ -51,17 +51,16 @@ class FCM(object):
 
 
     def fit(self,X,maxiter=10):
-        prev = None
         curr = np.copy(self.centroids)
+        prev = np.zeros(curr.shape)
         i = 0
-        while not np.array_equal(prev, curr) and i < maxiter:
+        while not np.allclose(prev, curr) and i < maxiter:
             print(f'iteration: {i}')
             self.nextCentroid(X)
             self.nextMemberships(X)
             prev = np.copy(curr)
             curr = np.copy(self.centroids)
             i += 1
-
 
     def classify(self, X):
         pass
