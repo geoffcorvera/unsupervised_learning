@@ -44,8 +44,18 @@ class FCM(object):
                 self.memberships[i][j] = 1/(t*sumterm)
 
 
-    def fit(self, X):
-        pass
+    def fit(self,X,maxiter=10):
+        prev = None
+        curr = np.copy(self.centroids)
+        i = 0
+        while not np.array_equal(prev, curr) and i < maxiter:
+            print(f'iteration: {i}')
+            self.nextCentroid(X)
+            self.nextMemberships(X)
+            prev = np.copy(curr)
+            curr = np.copy(self.centroids)
+            i += 1
+
 
     def classify(self, X):
         pass

@@ -26,8 +26,7 @@ def fcm_test():
     cluster3 = np.random.normal((-1,3), 0.2, size=(5,2))
     test_data = np.concatenate([cluster1, cluster2, cluster3], axis=0)
 
-    fcm = FCM(3,2,test_data)
-    fcm.nextCentroid(test_data)
-    fcm.nextMemberships(test_data)
+    fcm = FCM(3,1.2,test_data)
+    fcm.fit(test_data, 40)
 
 fcm_test()
