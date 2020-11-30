@@ -40,8 +40,15 @@ def fcm_trials(k,m=1.2,ntrials=5,bestOnly=True):
     for i in range(ntrials):
         print(f'\nTRIAL {i+1}:')
         model = FCM(k,m,data)
-        SSEs.append(model.train(data).pop())
+        err = model.train(data)
+        SSEs.append(err.pop())  # record final sum of squares error
         models.append(model)
+        # TODO: plot model results with appropriate trial label
+        res = model.classify()
+        plt.title(f'FCM Trial {i+1}:')
+        plt.suptitle(f'sum of squares error = {err.pop()}')
+        plotKClusters(res,k,data)
+
     if bestOnly:
         lowest_err = np.argmin(np.array(SSEs))
         return models[lowest_err]
