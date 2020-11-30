@@ -18,7 +18,7 @@ class KMeans(object):
         err = 0
         for k in range(self.k):
             cluster = X[np.where(results==k)]
-            err += np.sum(np.linalg.norm(cluster-self.centroids[k], axis=1)**2)
+            err += np.sum(np.linalg.norm(cluster-self.centroids[k], axis=1))
         return err
 
     # E step (assign most plausible cluster to xs)

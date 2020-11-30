@@ -58,7 +58,7 @@ class FCM(object):
         err = 0
         for c in range(self.c):
             cluster = X[np.where(results==c)]
-            err += np.sum(np.linalg.norm(cluster-self.centroids[c], axis=1)**2)
+            err += np.sum(np.linalg.norm(cluster-self.centroids[c], axis=1))
 
         return err
             
