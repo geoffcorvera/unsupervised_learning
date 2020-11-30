@@ -47,7 +47,6 @@ class KMeans(object):
 
         # while not np.array_equal(prev, curr) and i < niter:
         while not np.array_equal(prev, curr) and i < niter:
-            print(f"iteration: {i}")
             self.assign(X)
             self.updateParams()
             prev = np.copy(curr)
@@ -55,6 +54,7 @@ class KMeans(object):
             err_per_epoch.append(self.SSE(X))
             i += 1
             
+        print(f"k-means finished in {i+1} iterations")
         return err_per_epoch
             
     def classify(self,X):
