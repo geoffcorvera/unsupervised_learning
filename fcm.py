@@ -6,10 +6,8 @@ class FCM(object):
     # Initialize model parameters
     def __init__(self,c,m,X):
         assert m > 1
-        # initialize memberships, & scale so rows sum to 1
-        memberships = np.random.rand(X.shape[0], c)
-        sums = np.sum(memberships, axis=1)
-        memberships = memberships/sums[:,np.newaxis]
+        
+        memberships = np.zeros((X.shape[0],c))
         
         # Initialize centroids using k-means
         km = KMeans(c,X)
@@ -70,8 +68,8 @@ class FCM(object):
         err_per_epoch = list()
         
         while not np.allclose(prev, curr) and i < maxiter:
-            self.nextCentroid(X)
             self.nextMemberships(X)
+            self.nextCentroid(X)
 
             prev = np.copy(curr)
             curr = np.copy(self.centroids)
