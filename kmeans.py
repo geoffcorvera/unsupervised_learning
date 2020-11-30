@@ -4,8 +4,10 @@ import numpy as np
 class KMeans(object):
 
     def __init__(self,k,X):
-        # randomly initialize k centroids
-        self.centroids = np.random.rand(k, X.shape[1])*np.max(X)
+        nf = X.shape[1]
+        # Get random sample from input X
+        sample = [np.random.choice(X.ravel(),nf,replace=False) for _ in range(k)]
+        self.centroids = np.array(sample)
         self.k = k
         self.nft = X.shape[1]
 
