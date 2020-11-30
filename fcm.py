@@ -63,14 +63,13 @@ class FCM(object):
         return err
             
     
-    def train(self,X,maxiter=10):
+    def train(self,X,maxiter=50):
         curr = np.copy(self.centroids)
         prev = np.zeros(curr.shape)
         i = 0
         err_per_epoch = list()
         
         while not np.allclose(prev, curr) and i < maxiter:
-            print(f'iteration: {i}')
             self.nextCentroid(X)
             self.nextMemberships(X)
 
@@ -79,6 +78,7 @@ class FCM(object):
             err_per_epoch.append(self.SSE(X))
             i += 1
         
+        print(f'  Finished in {i} iterations')
         return err_per_epoch
 
 
