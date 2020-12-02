@@ -53,36 +53,27 @@ def kmeans_trials(k=3,r=1):
     plt.show()
 
 
-# Runs n trials, and returns model with lowest sum-of-squares
-# error, or models from all trials.
-# TODO: remove "bestOnly" functionality
-# TODO: refactor to make more like kmeans_trials
-def fcm_trials(k,m=1.2,ntrials=5,bestOnly=True):
-    models = list()
-    SSEs = list()
-    for i in range(ntrials):
-        print(f'\nTRIAL {i+1}:')
-        model = FCM(k,m,data)
-        err = model.train(data)
-        SSEs.append(err.pop())  # record final sum of squares error
-        models.append(model)
+# Runs r fuzzy C-Means trials, and selects model with lowest SSE.
+def fcm_trials(k, m=1.2, rtrials=5):
+    models = [FCM(k,m,data) for _ in range(rtrials)]
+    training_err = [model.train(data) for model in models]
+    results = [(err[-1],model) for err, model in zip(training_err, models)]
+    results = sorted(results, key=lambda x: x[0])
 
-        plt.title(f'FCM Trial {i+1}:')
-        plt.suptitle(f'sum of squares error = {err.pop()}')
+    # Plot results for each FCM trial
+    for i, trial in enumerate(results):
+        final_err = round(trial[0],2)
+        model = trial[1]
+        plt.title(f'Trial {i+1} FCM Cluster Assignments (SSE={final_err})')
         plotKClusters(model,k,data)
-
-    if bestOnly:
-        lowest_err = np.argmin(np.array(SSEs))
-        return models[lowest_err]
-    else:
-        return models
-
-
-def run_fcm_trials(): 
-    # Run 10 fuzzy c-means trials and plot results of model with lowest SSE
-    best_model = fcm_trials(k=3,m=1.2,ntrials=10)
-    results = best_model.classify()
-    plotKClusters(results,3,data)
+        plt.show()
+    
+    # Select and show bes model from r trials
+    lowest_sse = round(results[0][0], 2)
+    best_model = results[0][1]
+    plt.title(f'Best FCM model (SSE={lowest_sse})')
+    plotKClusters(best_model,k,data)
+    plt.show()
 
 # Select & run experiments
 try:
