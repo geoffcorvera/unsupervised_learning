@@ -57,6 +57,7 @@ def kmeans_trials(k=3,r=1):
 # Runs n trials, and returns model with lowest sum-of-squares
 # error, or models from all trials.
 # TODO: remove "bestOnly" functionality
+# TODO: refactor to make more like kmeans_trials
 def fcm_trials(k,m=1.2,ntrials=5,bestOnly=True):
     models = list()
     SSEs = list()
