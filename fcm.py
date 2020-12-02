@@ -11,8 +11,8 @@ class FCM(object):
         
         # Initialize centroids using k-means
         km = KMeans(c,X)
-        km.assign(X)
-        km.updateParams()
+        km.assignClusters(X)
+        km.updateCentroids()
         centroids = np.copy(km.centroids)
 
         self.c = c
