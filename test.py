@@ -55,6 +55,7 @@ def kmeans_trials(k=3,r=1):
 
 # Runs n trials, and returns model with lowest sum-of-squares
 # error, or models from all trials.
+# TODO: remove "bestOnly" functionality
 def fcm_trials(k,m=1.2,ntrials=5,bestOnly=True):
     models = list()
     SSEs = list()
@@ -83,10 +84,10 @@ def run_fcm_trials():
     results = best_model.classify()
     plotKClusters(results,3,data)
 
-
+# Select & run experiments
 try:
-    K = int(sys.argv[1])
-    algo = sys.argv[2]
+    algo = sys.argv[1]
+    K = int(sys.argv[2])
     try:
         R = int(sys.argv[3])
     except(IndexError):
@@ -95,9 +96,9 @@ try:
     if algo=="km":
         kmeans_trials(K, R)
     elif algo=="fcm":
-        fcm_trials(K,R)
+        m = float(sys.argv[4])
+        fcm_trials(K,m,R)
     else:
         print("Incorrect algo. Select either: km (k-means) or fcm (fuzzy c-means)")
-
 except(IndexError):
-    print('Usage:\n  python3 test.py <k=number of clusters> <"km"=kmeans, "fcm"=fuzzy c-means> <r=number of trials>')
+    print('Usage:\n  python3 test.py <"km"=kmeans, "fcm"=fuzzy c-means> <k=number of clusters> <r=number of trials> <m=fuzzifier (FOR FCM ONLY)>')
