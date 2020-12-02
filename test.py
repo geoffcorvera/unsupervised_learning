@@ -1,4 +1,5 @@
 import numpy as np
+import sys
 import matplotlib.pyplot as plt
 from kmeans import KMeans 
 from fcm import FCM
@@ -51,7 +52,6 @@ def kmeans_trials(k=3,r=1):
 
 
 
-kmeans_trials(r=10)
 
 # Runs n trials, and returns model with lowest sum-of-squares
 # error, or models from all trials.
@@ -83,3 +83,21 @@ def run_fcm_trials():
     results = best_model.classify()
     plotKClusters(results,3,data)
 
+
+try:
+    K = int(sys.argv[1])
+    algo = sys.argv[2]
+    try:
+        R = int(sys.argv[3])
+    except(IndexError):
+        R = 1
+    
+    if algo=="km":
+        kmeans_trials(K, R)
+    elif algo=="fcm":
+        fcm_trials(K,R)
+    else:
+        print("Incorrect algo. Select either: km (k-means) or fcm (fuzzy c-means)")
+
+except(IndexError):
+    print('Usage:\n  python3 test.py <k=number of clusters> <"km"=kmeans, "fcm"=fuzzy c-means> <r=number of trials>')
