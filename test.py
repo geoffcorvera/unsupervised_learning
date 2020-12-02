@@ -33,7 +33,6 @@ def kmeans_trials(k=3,r=1):
     # Sort modes by sum-of-squares error
     results = [(err[-1], model) for err, model in zip(training_err,models)]
     results = sorted(results, key=lambda x: x[0])   # Sort asscending by sum square error
-    # best_model = results[0][1]
 
     # Plot trial results
     for i,trial in enumerate(results):
@@ -43,6 +42,13 @@ def kmeans_trials(k=3,r=1):
         predictions = m.classify(data)
         plt.title(f'Trial {i+1} Cluster Assignments (SSE={final_err})')
         plotKClusters(predictions, k, data)
+    
+    # Show best model from r trials
+    best_sse = round(results[0][0],2)
+    best_model = results[0][1]
+    plt.title(f"Best model (SSE={best_sse})")
+    plotKClusters(best_model.classify(data),k,data)
+
 
 
 kmeans_trials(r=10)
