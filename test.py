@@ -17,11 +17,13 @@ def plotTargetAssignments(X):
     plt.show()
 
 
-def plotKClusters(results,k,X):
+def plotKClusters(model,k,X):
+    results = model.classify(X)
     clusters = [X[np.where(results==i)] for i in range(k)]
     for cluster,color in zip(clusters,colors[:k]):
         plt.scatter(cluster[:,:1], cluster[:,1:], c=color)
-    plt.show()
+    # Show centroids
+    plt.scatter(model.centroids[:,:1], model.centroids[:,1:], marker='X',c='y')
 
 
 # TODO: run r trials and select model with lowest SSE
@@ -48,9 +50,8 @@ def kmeans_trials(k=3,r=1):
     best_sse = round(results[0][0],2)
     best_model = results[0][1]
     plt.title(f"Best model (SSE={best_sse})")
-    plotKClusters(best_model.classify(data),k,data)
-
-
+    plotKClusters(best_model,k,data)
+    plt.show()
 
 
 # Runs n trials, and returns model with lowest sum-of-squares
@@ -65,11 +66,10 @@ def fcm_trials(k,m=1.2,ntrials=5,bestOnly=True):
         err = model.train(data)
         SSEs.append(err.pop())  # record final sum of squares error
         models.append(model)
-        # TODO: plot model results with appropriate trial label
-        res = model.classify()
+        
         plt.title(f'FCM Trial {i+1}:')
         plt.suptitle(f'sum of squares error = {err.pop()}')
-        plotKClusters(res,k,data)
+        plotKClusters(model,k,data)
 
     if bestOnly:
         lowest_err = np.argmin(np.array(SSEs))
