@@ -12,7 +12,7 @@ class KMeans(object):
         self.nft = X.shape[1]
 
     # Returns total sum-of-squares error over all clusters
-    def SSE(self,X):
+    def sumOfSquaresErr(self,X):
         results = self.classify(X)
         assert len(results) == len(X)
         err = 0
@@ -22,7 +22,7 @@ class KMeans(object):
         return err
 
     # E step (assign most plausible cluster to xs)
-    def assign(self, X):
+    def assignClusters(self, X):
         self.clusters = [list() for _ in range(self.k)]
         for x in X:
             deltas = [x - m for m in self.centroids]
@@ -31,7 +31,7 @@ class KMeans(object):
             self.clusters[nearest].append(x)
     
     # Estimate maximize likelihood of the paramters (recalculate k centroids)
-    def updateParams(self):
+    def updateCentroids(self):
         for cluster, k in zip(self.clusters, range(self.k)):
             cluster = np.array(cluster)
             if cluster.size > 0:
@@ -40,23 +40,26 @@ class KMeans(object):
                 self.centroids[k] = centroid
     
     def train(self, X, niter=100):
-        prev = None
-        curr = np.copy(self.centroids)
+        prev = 0
+        curr = self.sumOfSquaresErr(X)
         i = 0
+
         err_per_epoch = list()
 
-        # while not np.array_equal(prev, curr) and i < niter:
-        while not np.array_equal(prev, curr) and i < niter:
-            self.assign(X)
-            self.updateParams()
-            prev = np.copy(curr)
-            curr = np.copy(self.centroids)
-            err_per_epoch.append(self.SSE(X))
+        while abs(prev-curr) > 0.001 and i < niter:
+            self.assignClusters(X)
+            self.updateCentroids()
+            prev = curr
+            err = self.sumOfSquaresErr(X)
+            curr = err
             i += 1
+            # For plotting
+            err_per_epoch.append(err)
             
         print(f"k-means finished in {i+1} iterations")
         return err_per_epoch
-            
+
+           
     def classify(self,X):
         # Calculate distances from k cluster centroids
         d1 = np.linalg.norm(X-self.centroids[0], axis=1)
