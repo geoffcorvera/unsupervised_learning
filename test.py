@@ -7,25 +7,19 @@ from fcm import FCM
 colors = np.array(['#49111c','#ee2e31','#1d7874','#7f7f7f','#050517','#231651','#ff8484'])
 data = np.genfromtxt('data/545_cluster_dataset.txt')
 
-def plotTargetAssignments(X):
-    c1 = X[:500]
-    c2 = X[500:1000]
-    c3 = X[1000:]
-    clusters = [c1,c2,c3]
-    for i,cluster in enumerate(clusters):
-        plt.scatter(cluster[:,:1], cluster[:,1:], c=colors[i])
-    plt.show()
-
-
 def plotKClusters(model,k,X):
-    results = model.classify(X)
+    if type(model) is FCM:
+        results = model.classify()
+    elif type(model) is KMeans:
+        results = model.classify(X)
+
     clusters = [X[np.where(results==i)] for i in range(k)]
     for cluster,color in zip(clusters,colors[:k]):
         plt.scatter(cluster[:,:1], cluster[:,1:], c=color)
     # Show centroids
     plt.scatter(model.centroids[:,:1], model.centroids[:,1:], marker='X',c='y')
 
-# Runs r # of trials and selects model with lowest SSE
+# Runs r K-Means trials and selects model with lowest SSE
 def kmeans_trials(k=3,r=1):
 
     # Create and train r models for trials
@@ -75,10 +69,13 @@ def fcm_trials(k, m=1.2, rtrials=5):
     plotKClusters(best_model,k,data)
     plt.show()
 
-# Select & run experiments
+# Run experiments
 try:
+    # Get algorithm and number of clusters
     algo = sys.argv[1]
     K = int(sys.argv[2])
+    
+    # Get number of trials
     try:
         R = int(sys.argv[3])
     except(IndexError):
@@ -91,5 +88,6 @@ try:
         fcm_trials(K,m,R)
     else:
         print("Incorrect algo. Select either: km (k-means) or fcm (fuzzy c-means)")
+        
 except(IndexError):
     print('Usage:\n  python3 test.py <"km"=kmeans, "fcm"=fuzzy c-means> <k=number of clusters> <r=number of trials> <m=fuzzifier (FOR FCM ONLY)>')
