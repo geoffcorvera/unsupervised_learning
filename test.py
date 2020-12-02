@@ -25,8 +25,7 @@ def plotKClusters(model,k,X):
     # Show centroids
     plt.scatter(model.centroids[:,:1], model.centroids[:,1:], marker='X',c='y')
 
-
-# TODO: run r trials and select model with lowest SSE
+# Runs r # of trials and selects model with lowest SSE
 def kmeans_trials(k=3,r=1):
 
     # Create and train r models for trials
