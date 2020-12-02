@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from kmeans import KMeans 
 from fcm import FCM
 
-colors = np.array(['#49111c','#ee2e31','#1d7874','#7f7f7f'])
+colors = np.array(['#49111c','#ee2e31','#1d7874','#7f7f7f','#050517','#231651','#ff8484'])
 data = np.genfromtxt('data/545_cluster_dataset.txt')
 
 def plotTargetAssignments(X):
@@ -42,9 +42,9 @@ def kmeans_trials(k=3,r=1):
         final_err = round(trial[0], 2)
         m = trial[1]
 
-        predictions = m.classify(data)
         plt.title(f'Trial {i+1} Cluster Assignments (SSE={final_err})')
-        plotKClusters(predictions, k, data)
+        plotKClusters(m, k, data)
+        plt.show()
     
     # Show best model from r trials
     best_sse = round(results[0][0],2)
@@ -66,7 +66,7 @@ def fcm_trials(k,m=1.2,ntrials=5,bestOnly=True):
         err = model.train(data)
         SSEs.append(err.pop())  # record final sum of squares error
         models.append(model)
-        
+
         plt.title(f'FCM Trial {i+1}:')
         plt.suptitle(f'sum of squares error = {err.pop()}')
         plotKClusters(model,k,data)
