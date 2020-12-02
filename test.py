@@ -23,13 +23,20 @@ def plotKClusters(results,k,X):
     plt.show()
 
 
-# TODO: run 10 trials and select model with lowest SSE
-def kmeans_trials(k=3):
+# TODO: run r trials and select model with lowest SSE
+def kmeans_trials(k=3,r=1):
+    # Create and fit model
     km = KMeans(k,data)
     err_plot = km.train(data)
-    results = km.classify(data)
+
+    # Plot training results
     plt.plot(err_plot)
+    plt.title(f"Sum-Squared-Error per Epoch (Final: {err_plot[-1]})")
     plt.show()
+
+    # Plot final results
+    results = km.classify(data)
+    plt.title("Final Cluster Assignments")
     plotKClusters(results,k,data)
 
 # Runs n trials, and returns model with lowest sum-of-squares
@@ -62,4 +69,5 @@ def run_fcm_trials():
     plotKClusters(results,3,data)
 
 
-run_fcm_trials()
+# run_fcm_trials()
+kmeans_trials()
