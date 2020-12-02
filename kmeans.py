@@ -65,9 +65,10 @@ class KMeans(object):
            
     def classify(self,X):
         # Calculate distances from k cluster centroids
-        d1 = np.linalg.norm(X-self.centroids[0], axis=1)
-        d2 = np.linalg.norm(X-self.centroids[1], axis=1)
-        d3 = np.linalg.norm(X-self.centroids[2], axis=1)
-        # d4 = np.linalg.norm(X-self.centroids[3], axis=1)
-        centroid_distances = np.c_[d1,d2,d3]
+        centroid_distances = np.linalg.norm(X-self.centroids[0], axis=1)
+        for k in range(1,self.k):
+            k_distances = np.linalg.norm(X-self.centroids[k], axis=1)
+            centroid_distances = np.c_[centroid_distances, k_distances]
+
+        # Select cluster with smallest distance
         return np.apply_along_axis(np.argmin, 1, centroid_distances)
