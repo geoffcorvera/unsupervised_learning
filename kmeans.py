@@ -39,6 +39,9 @@ class KMeans(object):
                 centroid = np.mean(cluster,axis=0)
                 self.centroids[k] = centroid
     
+    # Loops between expectation-step (cluster assignment) and
+    # maximization-step (recalculate cluster centroids), until
+    # sum-squared-error stops decreasing, or reach max iterations.
     def train(self, X, niter=100):
         prev = 0
         curr = self.sumOfSquaresErr(X)

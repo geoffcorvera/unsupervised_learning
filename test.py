@@ -25,19 +25,27 @@ def plotKClusters(results,k,X):
 
 # TODO: run r trials and select model with lowest SSE
 def kmeans_trials(k=3,r=1):
-    # Create and fit model
-    km = KMeans(k,data)
-    err_plot = km.train(data)
 
-    # Plot training results
-    plt.plot(err_plot)
-    plt.title(f"Sum-Squared-Error per Epoch (Final: {err_plot[-1]})")
-    plt.show()
+    # Create and train r models for trials
+    models = [KMeans(k,data) for _ in range(r)]
+    training_err = [m.train(data) for m in models]
+    
+    # Sort modes by sum-of-squares error
+    results = [(err[-1], model) for err, model in zip(training_err,models)]
+    results = sorted(results, key=lambda x: x[0])   # Sort asscending by sum square error
+    # best_model = results[0][1]
 
-    # Plot final results
-    results = km.classify(data)
-    plt.title("Final Cluster Assignments")
-    plotKClusters(results,k,data)
+    # Plot trial results
+    for i,trial in enumerate(results):
+        final_err = round(trial[0], 2)
+        m = trial[1]
+
+        predictions = m.classify(data)
+        plt.title(f'Trial {i+1} Cluster Assignments (SSE={final_err})')
+        plotKClusters(predictions, k, data)
+
+
+kmeans_trials(r=10)
 
 # Runs n trials, and returns model with lowest sum-of-squares
 # error, or models from all trials.
@@ -62,12 +70,10 @@ def fcm_trials(k,m=1.2,ntrials=5,bestOnly=True):
     else:
         return models
 
+
 def run_fcm_trials(): 
     # Run 10 fuzzy c-means trials and plot results of model with lowest SSE
     best_model = fcm_trials(k=3,m=1.2,ntrials=10)
     results = best_model.classify()
     plotKClusters(results,3,data)
 
-
-# run_fcm_trials()
-kmeans_trials()
